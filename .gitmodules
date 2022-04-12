@@ -1,0 +1,3 @@
+[submodule "data"]
+	path = data
+	url = git@gitlab.gwdg.de:mpib/chm/Human-AI-cooperation/xai-nft-data.git
