@@ -27,7 +27,10 @@ def get_asset_info(a):
         "asset_id": a['id'],
         "token_id": a['token_id'],
         "asset_contract_address": a['asset_contract']['address'],
-        "collection": a['collection']['slug']
+        "collection": a['collection']['slug'],
+        'image_url': a['image_url'],
+        'image_preview_url': a['image_preview_url'],
+        'image_thumbnail_url': a['image_thumbnail_url'],
     }
     return asset_info
 
