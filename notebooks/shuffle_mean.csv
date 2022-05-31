@@ -1,0 +1,17 @@
+name,shuffle_feature,diff
+explained variance,Background,0.0003060409726965141
+explained variance,Clothes,-0.18215228317768528
+explained variance,Earring,-0.023194031604850684
+explained variance,Eyes,-0.17185723012801993
+explained variance,Fur,-0.0937337527194067
+explained variance,Hat,-0.18613879195790708
+explained variance,Mouth,-0.19036262035560894
+explained variance,TraitCount,-0.13944837302985222
+r2,Background,0.00030604097269652336
+r2,Clothes,-0.1821522831776853
+r2,Earring,-0.02319403160485072
+r2,Eyes,-0.17185723012801998
+r2,Fur,-0.09373375271940672
+r2,Hat,-0.18613879195790714
+r2,Mouth,-0.190362620355609
+r2,TraitCount,-0.13944837302985225
