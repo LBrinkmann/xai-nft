@@ -7,21 +7,22 @@ def get_sales_info(sale):
     if sale is None:
         return {}
     else:
-        pt = sale['payment_token'] if sale['payment_token'] else {}
+        pt = sale.get('payment_token', {})
+        transaction = sale.get('transaction', {})
         return {
-            'currency_symbol': pt.get('symbol'),
-            'asset_bundle': sale['asset_bundle'],
-            'event_timestamp': sale['transaction']['timestamp'],
-            'event_type': sale['event_type'],
-            'total_price': sale['total_price'],
-            'currency_name': pt.get('name'),
-            'eth_price': pt.get('eth_price'),
-            'usd_price': pt.get('usd_price'),
-            'quantity': sale['quantity'],
-            'decimals':  pt.get('decimals'),
+            'currency_symbol': pt.get('symbol') if pt is not None else None,
+            'asset_bundle': sale.get('asset_bundle'),
+            'event_timestamp': transaction.get('timestamp') if transaction is not None else None,
+            'event_type': sale.get('event_type'),
+            'total_price': sale.get('total_price'),
+            'currency_name': pt.get('name') if pt is not None else None,
+            'eth_price': pt.get('eth_price') if pt is not None else None,
+            'usd_price': pt.get('usd_price') if pt is not None else None,
+            'quantity': sale.get('quantity'),
+            'decimals': pt.get('decimals') if pt is not None else None,
         }
 
-
+    
 def get_asset_info(a):
     asset_info = {
         "asset_id": a['id'],
@@ -35,13 +36,16 @@ def get_asset_info(a):
     return asset_info
 
 
+
 def process_assets(top_folder):
     # merge assets
     sub_folder = 'assets'
 
     folder = os.path.join(top_folder, sub_folder)
-    files = list(get_all_files(folder))
-
+    
+    # Filter out directories from the list of files
+    files = [f for f in get_all_files(folder) if os.path.isfile(f)]
+    
     traits = []
     sales = []
     assets = []
@@ -74,6 +78,7 @@ def process_assets(top_folder):
                                       'assets.parquet'), engine='pyarrow')
 
 
+
 def post_traits(df):
     traits_columns = ['asset_id', 'trait_type', 'value', 'trait_count']
     df['value'] = df['value'].astype('str')
@@ -92,18 +97,20 @@ def post_sales(df):
     return df
 
 
+
 def process_sales(top_folder):
     # merge events
     sub_folder = 'events'
 
     folder = os.path.join(top_folder, sub_folder)
-    files = list(get_all_files(folder))
+    # Filter files to include only JSON files
+    files = [f for f in get_all_files(folder) if f.endswith('.json')]
 
     rec = []
     for i, f in enumerate(files):
         if i % (len(files) // 5) == 0:
             print(f'{i}/{len(files)}')
-        raw = load_json(f)
+        raw = load_json(f)  
         for el in raw:
             if el['asset'] is not None:
                 try:
@@ -120,6 +127,7 @@ def process_sales(top_folder):
     df = pd.DataFrame(rec)
     df = post_sales(df)
     df.to_parquet(os.path.join(top_folder, 'sale_events.parquet'), index=False)
+
 
 
 def merge_sales(top_folder):

@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import datetime
 from time import sleep
+from datetime import datetime, timedelta
 from ..utils.data import save_json, load_json, check_file, get_all_files
 
 data_folder = '../data'
@@ -11,7 +12,9 @@ coll_folder = 'top_collections_3'
 
 
 def _authorized_opensea_get(url):
-    opensea_key = os.environ['OPENSEA_KEY']
+    
+    opensea_key = '0f100bc5cbc942b2a012ef995fa26ee9'
+    
     headers = {
         "Accept": "application/json",
         "X-API-KEY": opensea_key
@@ -19,6 +22,9 @@ def _authorized_opensea_get(url):
 
     response = requests.request("GET", url, headers=headers)
     return response
+
+
+
 
 
 def _get_collections(limit, offset):
@@ -109,15 +115,17 @@ get_events = paginate_cursor(
     detect_throttle(_get_events))
 
 
+
+
 def get_collection_assets(collection):
     assets = []
-    for i in range(201):
-        resp = get_assets(collection=collection, limit=50, page=i)
+    for i in range(51):
+        resp = get_assets(collection=collection, limit=100, page=i)
         if len(resp['assets']) == 0:
             break
         assets.extend(resp['assets'])
+  
     return assets
-
 
 def get_all_events(collection, *, before, after):
     events = []

@@ -7,7 +7,8 @@ def parse_collections(top_folder):
     # merge details of top collections
 
     details_folder = os.path.join(top_folder, 'details')
-    details_files = list(get_all_files(details_folder))
+    # Filter files to include only JSON files
+    details_files = [f for f in get_all_files(details_folder) if f.endswith('.json')]
 
     collection_details = [load_json(cf)['collection'] for cf in details_files]
 
