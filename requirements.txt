@@ -3,13 +3,7 @@ numpy
 pandas
 scipy
 sklearn
-pyyaml
 docopt
 seaborn
 requests
-fastparquet==0.7.2
 pyarrow
-numpy
-pandas
-sklearn
-prophet==1.0.1
